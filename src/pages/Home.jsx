@@ -11,7 +11,6 @@ const Home = () => {
       <Hero />
       <Features />
       <SymptomSection />
-      <AppointmentSection />
       <Roles />
       <Contact />
     </>

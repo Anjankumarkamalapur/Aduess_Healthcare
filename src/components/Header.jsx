@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Header = () => {
   return (
     <>
@@ -144,9 +145,15 @@ const Header = () => {
           <li><a href="#hero">Home</a></li>
           <li><a href="#features">Features</a></li>
           <li><a href="#symptoms">Symptoms</a></li>
-          <li><a href="#appointment">Appointment</a></li>
+
+          {/* ROUTE-BASED LINK */}
+          <li>
+            <Link to="/appointment">Appointment</Link>
+          </li>
+
           <li><a href="#contact">Contact</a></li>
         </ul>
+
       </nav>
     </>
   );

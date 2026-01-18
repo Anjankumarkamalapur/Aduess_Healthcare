@@ -11,7 +11,6 @@ import ScrollToTop from "./components/ScrollToTop";
 import DiabetesForm from "./components/DiabetesForm";
 
 
-
 function App() {
   return (
     <BrowserRouter>
