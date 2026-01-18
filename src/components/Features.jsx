@@ -111,7 +111,7 @@ const Features = () => {
         <div className="cards">
           {/* HEART – NOW HIGHLIGHTED */}
           <div className="card highlight">
-            <h3>Heart Disease Prediction</h3>
+            <h3>Heart Disease Detection</h3>
             <p>AI-powered analysis of cardiac risk</p>
             <Link to="/heart">
               <button>Predict</button>
