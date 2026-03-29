@@ -137,23 +137,35 @@ const Header = () => {
 
       {/* ===== HEADER UI ===== */}
       <nav className="nav">
-        <a href="#hero" className="logo">
+        
+        {/* LOGO */}
+        <Link to="/#hero" className="logo">
           audesshealthcare
-        </a>
+        </Link>
 
+        {/* NAV LINKS */}
         <ul className="nav-links">
-          <li><a href="#hero">Home</a></li>
-          <li><a href="#features">Features</a></li>
-          <li><a href="#symptoms">Symptoms</a></li>
+          <li>
+            <Link to="/#hero">Home</Link>
+          </li>
 
-          {/* ROUTE-BASED LINK */}
+          <li>
+            <Link to="/#features">Features</Link>
+          </li>
+
+          <li>
+            <Link to="/#symptoms">Symptoms</Link>
+          </li>
+
+          {/* ROUTE PAGE */}
           <li>
             <Link to="/appointment">Appointment</Link>
           </li>
 
-          <li><a href="#contact">Contact</a></li>
+          <li>
+            <Link to="/#contact">Contact</Link>
+          </li>
         </ul>
-
       </nav>
     </>
   );
