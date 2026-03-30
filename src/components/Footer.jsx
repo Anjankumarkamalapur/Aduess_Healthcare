@@ -27,7 +27,7 @@ const Footer = () => {
 
       {/* ===== FOOTER UI ===== */}
       <footer className="footer">
-        <p>© 2025 audess. All rights reserved.</p>
+        <p>© 2026 audess. All rights reserved.</p>
       </footer>
     </>
   );
