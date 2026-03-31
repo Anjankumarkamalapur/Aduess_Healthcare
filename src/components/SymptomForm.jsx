@@ -19,24 +19,45 @@ const SymptomForm = () => {
   const [result, setResult] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // ✅ Toggle checkbox safely
   const toggleSymptom = (symptom) => {
-    setSymptoms({ ...symptoms, [symptom]: !symptoms[symptom] });
+    setSymptoms((prev) => ({
+      ...prev,
+      [symptom]: !prev[symptom]
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ Get selected symptoms
+    const selectedSymptoms = symptomsList.filter(
+      (s) => symptoms[s]
+    );
+
+    // 🔥 Prevent empty request (IMPORTANT)
+    if (selectedSymptoms.length === 0) {
+      setResult("Please select at least one symptom");
+      return;
+    }
+
     setLoading(true);
     setResult("");
 
-    const payload = {};
-    symptomsList.forEach(
-      (s) => (payload[s] = symptoms[s] ? 1 : 0)
-    );
-
     try {
-      const res = await predictSymptoms(payload);
-      setResult(`Possible Disease: ${res.data.predicted_disease}`);
-    } catch {
+      const res = await predictSymptoms({
+        symptoms: selectedSymptoms
+      });
+
+      // ✅ Safe response handling
+      if (res?.data?.prediction) {
+        setResult(`Possible Disease: ${res.data.prediction}`);
+      } else {
+        setResult("No prediction received");
+      }
+
+    } catch (err) {
+      console.error("API ERROR:", err?.response?.data || err.message);
       setResult("Error predicting disease");
     }
 
@@ -45,7 +66,6 @@ const SymptomForm = () => {
 
   return (
     <>
-      {/* ===== INTERNAL CSS ===== */}
       <style>
         {`
           .symptom-container {
@@ -80,12 +100,11 @@ const SymptomForm = () => {
             background: #f8fafc;
             border: 1px solid #e2e8f0;
             cursor: pointer;
-            transition: background 0.2s ease, box-shadow 0.2s ease;
+            transition: 0.2s;
           }
 
           .symptom-item:hover {
             background: #ecfeff;
-            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.12);
           }
 
           .symptom-item input {
@@ -110,12 +129,11 @@ const SymptomForm = () => {
             cursor: pointer;
             background: linear-gradient(90deg, #2563eb, #0ea5e9);
             color: white;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: 0.2s;
           }
 
           .symptom-form button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 14px 32px rgba(37, 99, 235, 0.35);
           }
 
           .symptom-form button:disabled {
@@ -135,7 +153,6 @@ const SymptomForm = () => {
         `}
       </style>
 
-      {/* ===== UI ===== */}
       <div className="symptom-container">
         <h2>Symptom-Based Disease Prediction</h2>
 
@@ -144,6 +161,7 @@ const SymptomForm = () => {
             <label key={symptom} className="symptom-item">
               <input
                 type="checkbox"
+                checked={!!symptoms[symptom]}
                 onChange={() => toggleSymptom(symptom)}
               />
               <span>{symptom.replace("_", " ").toUpperCase()}</span>

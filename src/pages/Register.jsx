@@ -9,42 +9,47 @@ const Register = () => {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
   });
 
   const handleRegister = async () => {
-  // 🔥 VALIDATION
-  if (!form.name || !form.email || !form.password) {
-    alert("All fields are required ❗");
-    return;
-  }
+    // 🔥 VALIDATION
+    if (!form.name || !form.email || !form.password || !form.confirmPassword) {
+      alert("All fields are required ❗");
+      return;
+    }
 
-  if (!form.email.includes("@")) {
-    alert("Enter valid email ❗");
-    return;
-  }
+    if (!form.email.includes("@")) {
+      alert("Enter valid email ❗");
+      return;
+    }
 
-  if (form.password.length < 6) {
-    alert("Password must be at least 6 characters ❗");
-    return;
-  }
+    if (form.password.length < 6) {
+      alert("Password must be at least 6 characters ❗");
+      return;
+    }
 
-  if (form.password !== form.confirmPassword) {
-    alert("Passwords do not match ❗");
-    return;
-  }
+    if (form.password !== form.confirmPassword) {
+      alert("Passwords do not match ❗");
+      return;
+    }
 
-  // ✅ API CALL
-  try {
-    const res = await registerUser(form);
-    const data = res.data;
+    try {
+      const res = await registerUser({
+        name: form.name,
+        email: form.email,
+        password: form.password,
+      });
 
-    alert(data.msg || "Registered successfully ✅");
-    navigate("/login");
-  } catch (err) {
-    console.error(err);
-    alert("Registration failed ❌");
-  }
-};
+      const data = res.data;
+
+      alert(data.msg || "Registered successfully ✅");
+      navigate("/login");
+    } catch (err) {
+      console.error(err);
+      alert("Registration failed ❌");
+    }
+  };
 
   return (
     <div style={styles.container}>
@@ -78,6 +83,17 @@ const Register = () => {
           value={form.password}
           onChange={(e) =>
             setForm({ ...form, password: e.target.value })
+          }
+          style={styles.input}
+        />
+
+        {/* 🔥 NEW FIELD */}
+        <input
+          type="password"
+          placeholder="Confirm Password"
+          value={form.confirmPassword}
+          onChange={(e) =>
+            setForm({ ...form, confirmPassword: e.target.value })
           }
           style={styles.input}
         />
