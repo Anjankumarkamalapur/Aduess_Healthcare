@@ -17,10 +17,12 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Admin from "./pages/Admin";
 
+import ChatBot from "./components/ChatBot.jsx";
+
 // 🔒 Protected Route (login required)
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/login" />;
+  return token ? children : <Navigate to="/login" replace />;
 };
 
 // 🔒 Admin Route (role based)
@@ -28,13 +30,15 @@ const AdminRoute = ({ children }) => {
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
 
-  if (!token) return <Navigate to="/login" />;
-  if (role !== "admin") return <Navigate to="/" />;
+  if (!token) return <Navigate to="/login" replace />;
+  if (role !== "admin") return <Navigate to="/" replace />;
 
   return children;
 };
 
 function App() {
+  const token = localStorage.getItem("token");
+
   return (
     <BrowserRouter>
       <Header />
@@ -42,8 +46,18 @@ function App() {
 
       <Routes>
         {/* 🔓 Public Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/login"
+          element={
+            token ? <Navigate to="/" replace /> : <Login />
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            token ? <Navigate to="/" replace /> : <Register />
+          }
+        />
 
         {/* 🔒 Protected Routes */}
         <Route
@@ -119,6 +133,9 @@ function App() {
           }
         />
       </Routes>
+
+      {/* 🔥 CHATBOT only when logged in */}
+      {token && <ChatBot />}
 
       <Footer />
     </BrowserRouter>
